@@ -1,42 +1,58 @@
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
-import { Button, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { useEffect } from 'react';
+import { Button, SafeAreaView, StyleSheet, Text } from 'react-native';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import tw from 'twrnc';
+import { selectCameraPermission, setCameraPermission } from './slices/permissionSlice';
+import { selectScanStatus, setScanStatus } from './slices/scanSlice';
+import { store } from './store';
 
-export default function App() {
-  const [hasPermission, setHasPermission] = useState(null);
-  const [scanned, setScanned] = useState(false);
+export default function AppWrapper() {
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  )
+}
+
+export function App() {
+  const dispatch = useDispatch();
+  const cameraPermission = useSelector(selectCameraPermission);
+  const scanStatus = useSelector(selectScanStatus);
 
   useEffect(() => {
     (async () => {
       const status = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status.granted);
+      dispatch(setCameraPermission(status.granted));
     })();
   }, []);
 
-  if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>
-  } else if(hasPermission === false) {
+  if (cameraPermission === null) {
+    return (<Text>Requesting for camera permission</Text>)
+  } else if (cameraPermission === false) {
     return <Text>No access to camera</Text>
   }
 
-  const handleBarCodeScanned = ({type, data}) =>{
-    setScanned(true);
+  const handleBarCodeScanned = ({ type, data }) => {
+    dispatch(setScanStatus(true));
     alert(`Type: ${type}\nData: ${data}`)
   }
 
   return (
     <SafeAreaView style={tw`flex-1 items-center justify-center`}>
-      <BarCodeScanner 
-        style= {StyleSheet.absoluteFillObject}
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-      />
-      {scanned && 
-        <Button 
+      {
+        cameraPermission !== null && cameraPermission !== false && (
+          <BarCodeScanner
+            style={StyleSheet.absoluteFillObject}
+            onBarCodeScanned={scanStatus ? undefined : handleBarCodeScanned}
+          />
+        )
+      }
+      {scanStatus &&
+        <Button
           title={'Tap to scan again'}
           onPress={() => {
-            setScanned(false);
+            dispatch(setScanStatus(false));
           }}
         />
       }
