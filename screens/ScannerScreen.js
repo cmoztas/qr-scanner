@@ -22,14 +22,21 @@ const ScannerScreen = () => {
             <View>
               <View style={tw`flex-row items-center`}>
                 <Text style={tw`font-bold mr-10 text-base`}>Type: </Text>
-                <Text>{qrValues.type}</Text>
+                <Text>{qrValues.qrType}</Text>
               </View>
               <Divider
                 style={tw`my-5`}
               />
               <View style={tw`flex-row items-center`}>
                 <Text style={tw`font-bold mr-10 text-base`}>Data: </Text>
-                <Text>{qrValues.data}</Text>
+                <Text>{qrValues.qrData}</Text>
+              </View>
+              <Divider
+                style={tw`my-5`}
+              />
+              <View style={tw`flex-row items-center`}>
+                <Text style={tw`font-bold mr-10 text-base`}>Data Type: </Text>
+                <Text>{qrValues.qrDataType}</Text>
               </View>
             </View>
           )

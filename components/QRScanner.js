@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Button, Linking, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCameraPermission, setCameraPermission } from '../slices/permissionSlice';
-import { selectQrValues, selectScanStatus, setQrValues, setScanStatus } from '../slices/scanSlice';
+import { selectScanStatus, setQrValues, setScanStatus } from '../slices/scanSlice';
 import tw from 'twrnc';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Camera } from 'expo-camera';
@@ -14,6 +14,7 @@ const QRScanner = () => {
   const dispatch = useDispatch();
   const cameraPermission = useSelector(selectCameraPermission);
   const scanStatus = useSelector(selectScanStatus);
+  const [dataType, setDataType] = useState('');
 
 
   useEffect(() => {
@@ -30,13 +31,26 @@ const QRScanner = () => {
   }
 
   const handleBarCodeScanned = ({ type, data }) => {
+    checkDataType(data);
     dispatch(setScanStatus(true));
-    dispatch(setQrValues({ type: type, data: data }));
+    dispatch(setQrValues({
+      qrType: type,
+      qrData: data,
+      qrDataType: dataType
+    }));
   }
+
+  const checkDataType = (data) => {
+    Linking.canOpenURL(data)
+      .then(data => data ? setDataType('link') : setDataType('text'))
+      .catch(error => console.log(error));
+    return dataType;
+  }
+
   return (
     <SafeAreaView style={tw`flex-1 items-center justify-center`}>
       {
-        cameraPermission && isFocused && !scanStatus &&(
+        cameraPermission && isFocused && !scanStatus && (
           <Camera
             barCodeScannerSettings={{
               barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
