@@ -9,7 +9,7 @@ const SplashScreen = () => {
 
     useEffect(() => {
         setTimeout(() => {
-            navigation.replace('QR Scanner');
+            navigation.replace('Home');
         }, 2000);
     }, []);
 

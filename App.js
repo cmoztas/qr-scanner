@@ -4,7 +4,7 @@ import { store } from './store';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from './screens/SplashScreen';
-import QRScanner from './components/QRScanner';
+import HomeScreen from './screens/HomeScreen';
 
 export default function AppWrapper() {
   return (
@@ -26,7 +26,7 @@ export function App() {
         }}
       >
         <Stack.Screen name='Splash' component={SplashScreen} />
-        <Stack.Screen name='QR Scanner' component={QRScanner} />
+        <Stack.Screen name='Home' component={HomeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
