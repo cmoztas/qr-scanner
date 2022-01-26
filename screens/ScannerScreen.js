@@ -24,45 +24,27 @@ const ScannerScreen = () => {
               <Text style={tw`font-bold mr-10 text-base`}>Type: </Text>
               <Text>{qrValues.qrType}</Text>
             </View>
-            <Divider
-              style={tw`my-5`}
-            />
+            <Divider style={tw`my-5`} />
             <View style={tw`flex-row items-center`}>
               <Text style={tw`font-bold mr-10 text-base`}>Data: </Text>
               <Text>{qrValues.qrData}</Text>
             </View>
-            <Divider
-              style={tw`my-5`}
-            />
+            <Divider style={tw`my-5`} />
             <View style={tw`flex-row items-center`}>
               <Text style={tw`font-bold mr-10 text-base`}>Data Type: </Text>
               <Text>{qrValues.qrDataType}</Text>
             </View>
-            <Divider
-              style={tw`my-5`}
-            />
+            <Divider style={tw`my-5`} />
             {qrValues.qrDataType === 'link' && (
               <View style={tw`flex-row items-center justify-center`}>
                 <Button
                   title="Open in browser"
                   onPress={() => Linking.openURL(qrValues.qrData)}
-                  icon={{
-                    name: 'globe',
-                    type: 'font-awesome',
-                    size: 15,
-                    color: 'white',
-                  }}
+                  icon={{ name: 'globe', type: 'font-awesome', size: 15, color: 'white' }}
                   iconContainerStyle={{ marginRight: 10 }}
                   titleStyle={{ fontWeight: '700' }}
-                  buttonStyle={{
-                    backgroundColor: 'rgba(90, 154, 230, 1)',
-                    borderColor: 'transparent',
-                    borderWidth: 0,
-                    borderRadius: 30,
-                  }}
-                  containerStyle={{
-                    width: 200,
-                  }}
+                  buttonStyle={{ backgroundColor: 'rgba(90, 154, 230, 1)', borderColor: 'transparent', borderWidth: 0, borderRadius: 30 }}
+                  containerStyle={{ width: 200 }}
                 />
               </View>
             )
