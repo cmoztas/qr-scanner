@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Button, Linking, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCameraPermission, setCameraPermission } from '../slices/permissionSlice';
@@ -14,8 +14,6 @@ const QRScanner = () => {
   const dispatch = useDispatch();
   const cameraPermission = useSelector(selectCameraPermission);
   const scanStatus = useSelector(selectScanStatus);
-  const [dataType, setDataType] = useState('');
-
 
   useEffect(() => {
     (async () => {
@@ -30,8 +28,9 @@ const QRScanner = () => {
     return <Text>No access to camera</Text>
   }
 
-  const handleBarCodeScanned = ({ type, data }) => {
-    checkDataType(data);
+  const handleBarCodeScanned = async ({ type, data }) => {
+    let dataType;
+    await checkDataType(data).then(data => dataType = data);
     dispatch(setScanStatus(true));
     dispatch(setQrValues({
       qrType: type,
@@ -40,11 +39,12 @@ const QRScanner = () => {
     }));
   }
 
-  const checkDataType = (data) => {
-    Linking.canOpenURL(data)
-      .then(data => data ? setDataType('link') : setDataType('text'))
+  const checkDataType = async (data) => {
+    let type = await Linking.canOpenURL(data)
+      .then(data => data ? type = 'link' : type = 'text')
       .catch(error => console.log(error));
-    return dataType;
+
+    return type;
   }
 
   return (
