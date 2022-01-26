@@ -1,11 +1,11 @@
-import { Text, View } from 'react-native';
+import { Linking, Text, View } from 'react-native';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import QRScanner from '../components/QRScanner';
 import tw from 'twrnc';
 import { useSelector } from 'react-redux';
 import { selectQrValues, selectScanStatus } from '../slices/scanSlice';
-import { Divider } from 'react-native-elements';
+import { Button, Divider } from 'react-native-elements';
 
 const ScannerScreen = () => {
   const qrValues = useSelector(selectQrValues);
@@ -38,6 +38,35 @@ const ScannerScreen = () => {
               <Text style={tw`font-bold mr-10 text-base`}>Data Type: </Text>
               <Text>{qrValues.qrDataType}</Text>
             </View>
+            <Divider
+              style={tw`my-5`}
+            />
+            {qrValues.qrDataType === 'link' && (
+              <View style={tw`flex-row items-center justify-center`}>
+                <Button
+                  title="Open in browser"
+                  onPress={() => Linking.openURL(qrValues.qrData)}
+                  icon={{
+                    name: 'globe',
+                    type: 'font-awesome',
+                    size: 15,
+                    color: 'white',
+                  }}
+                  iconContainerStyle={{ marginRight: 10 }}
+                  titleStyle={{ fontWeight: '700' }}
+                  buttonStyle={{
+                    backgroundColor: 'rgba(90, 154, 230, 1)',
+                    borderColor: 'transparent',
+                    borderWidth: 0,
+                    borderRadius: 30,
+                  }}
+                  containerStyle={{
+                    width: 200,
+                  }}
+                />
+              </View>
+            )
+            }
           </View>
         )
         }

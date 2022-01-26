@@ -31,6 +31,7 @@ const QRScanner = () => {
   const handleBarCodeScanned = async ({ type, data }) => {
     let dataType;
     await checkDataType(data).then(data => dataType = data);
+    
     dispatch(setScanStatus(true));
     dispatch(setQrValues({
       qrType: type,
