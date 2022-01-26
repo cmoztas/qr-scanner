@@ -42,7 +42,7 @@ const QRScanner = () => {
 
   const checkDataType = async (data) => {
     let type = await Linking.canOpenURL(data)
-      .then(data => data ? type = 'link' : type = 'text')
+      .then(data => data ? type = 'Link' : type = 'Text')
       .catch(error => console.log(error));
 
     return type;
