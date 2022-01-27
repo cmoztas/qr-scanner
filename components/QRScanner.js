@@ -54,7 +54,27 @@ const QRScanner = () => {
         cameraPermission && isFocused && !scanStatus && (
           <Camera
             barCodeScannerSettings={{
-              barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
+              barCodeTypes: [
+                BarCodeScanner.Constants.BarCodeType.aztec,
+                BarCodeScanner.Constants.BarCodeType.codabar,
+                BarCodeScanner.Constants.BarCodeType.code39,
+                BarCodeScanner.Constants.BarCodeType.code93,
+                BarCodeScanner.Constants.BarCodeType.code128,
+                BarCodeScanner.Constants.BarCodeType.code39mod43,
+                BarCodeScanner.Constants.BarCodeType.datamatrix,
+                BarCodeScanner.Constants.BarCodeType.ean13,
+                BarCodeScanner.Constants.BarCodeType.ean8,
+                BarCodeScanner.Constants.BarCodeType.interleaved2of5,
+                BarCodeScanner.Constants.BarCodeType.itf14,
+                BarCodeScanner.Constants.BarCodeType.maxicode,
+                BarCodeScanner.Constants.BarCodeType.pdf417,
+                BarCodeScanner.Constants.BarCodeType.rss14,
+                BarCodeScanner.Constants.BarCodeType.rssexpanded,
+                BarCodeScanner.Constants.BarCodeType.upc_a,
+                BarCodeScanner.Constants.BarCodeType.upc_e,
+                BarCodeScanner.Constants.BarCodeType.upc_ean,
+                BarCodeScanner.Constants.BarCodeType.qr,
+              ],
             }}
             onBarCodeScanned={scanStatus ? undefined : handleBarCodeScanned}
             style={StyleSheet.absoluteFillObject}

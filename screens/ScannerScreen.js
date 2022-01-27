@@ -17,22 +17,27 @@ const ScannerScreen = () => {
         <QRScanner />
       </View>
       <View style={tw`h-1/2 p-5`}>
-        <Text 
-          style={tw`text-black text-center font-bold mb-5`}
-        >
-          Scanned QR Code Values will be appeared down. 
-        </Text>
+        {!scanStatus && (
+          <View>
+            <Text
+              style={tw`text-black text-center font-bold mb-5`}
+            >
+              Scanned barcode Values will be appeared down.
+            </Text>
+            <Divider style={tw`mb-5`} />
+          </View>
+        )
+        }
         {qrValues && scanStatus && (
           <ScrollView>
-            <Divider style={tw`mb-5`} />
+            <View style={tw`flex-row items-center flex-wrap`}>
+              <Text style={tw`font-bold mr-10 text-base`}>Type: </Text>
+              <Text>{qrValues.qrType}</Text>
+            </View>
+            <Divider style={tw`my-5`} />
             <View style={tw`flex-row items-center flex-wrap`}>
               <Text style={tw`font-bold mr-10 text-base`}>Data: </Text>
               <Text>{qrValues.qrData}</Text>
-            </View>
-            <Divider style={tw`my-5`} />
-            <View style={tw`flex-row items-center`}>
-              <Text style={tw`font-bold mr-10 text-base`}>Data Type: </Text>
-              <Text>{qrValues.qrDataType}</Text>
             </View>
             <Divider style={tw`my-5`} />
             {qrValues.qrDataType === 'Link' && (
@@ -43,7 +48,7 @@ const ScannerScreen = () => {
                   icon={{ name: 'globe', type: 'font-awesome', size: 15, color: 'white' }}
                   iconContainerStyle={tw`mr-2`}
                   titleStyle={{ fontWeight: '600' }}
-                  buttonStyle={ tw`bg-blue-400 border-transparent border-0 rounded-xl my-5`}
+                  buttonStyle={tw`bg-blue-400 border-transparent border-0 rounded-xl my-5`}
                   containerStyle={tw`w-50`}
                 />
               </View>
