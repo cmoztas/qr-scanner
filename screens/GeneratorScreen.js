@@ -1,29 +1,31 @@
 import React, { useRef, useState } from 'react';
-import { Text, View, ToastAndroid } from 'react-native';
-import {CameraRoll} from '@react-native-community/cameraroll';
+import { Text, View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import tw from 'twrnc';
-import RNFS from "react-native-fs"
-import uuid from '@craftzdog/react-native-uuid';
 import SvgQRCode from 'react-native-qrcode-svg';
+import { FileSystem, StorageAccessFramework } from 'expo-file-system';
 
 const GeneratorScreen = () => {
   const [qrValue, setQrValue] = useState('');
-  const svg = useRef(null);
-  
+  let svg = useRef(null);
+
+  const getDataURL = async () => {
+    const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
+    if (permissions.granted) {
+      const uri = permissions.directoryUri;
+      console.log(uri);
+      await svg.toDataURL(data => {
+        StorageAccessFramework.createFileAsync(uri, 'test', 'image/png').then(data2 =>
+          StorageAccessFramework.writeAsStringAsync(uri, data2).then(data3 => console.log(data3)).catch(err => console.log(err))
+        );
+      });
+    }
+  }
+
   const onPressHandler = () => {
-    svg.toDataURL((data) => {
-      RNFS.writeFile(RNFS.CachesDirectoryPath + "/" + uuid.v4() + ".png", data, 'base64')
-        .then((success) => {
-          return CameraRoll.saveToCameraRoll(RNFS.CachesDirectoryPath + "/" + uuid.v4() + ".png", 'photo')
-        })
-        .then(() => {
-          this.setState({ busy: false, imageSaved: true })
-          ToastAndroid.show('Saved to gallery !!', ToastAndroid.SHORT)
-        })
-    })
+    getDataURL();
   }
 
   return (
@@ -42,11 +44,11 @@ const GeneratorScreen = () => {
       </View>
       {qrValue != '' && (
         <View style={tw`items-center`}>
-          <SvgQRCode value={qrValue} getRef={(ref) => (svg = ref)}/>
+          <SvgQRCode value={qrValue} getRef={ref => svg = ref} onError={err => console.log(err)} />
           <View style={tw`mt-20`}></View>
           <Button
             title={<Text style={tw`text-white font-semibold text-base`}>Download QR</Text>}
-            onPress={() => onPressHandler}
+            onPress={() => onPressHandler()}
             icon={<FontAwesome5 name='qrcode' color='#fff' size={18} style={tw`mr-4`} />}
             buttonStyle={tw`bg-blue-400 border-transparent border-0 rounded-xl`}
             containerStyle={tw`w-50`}
