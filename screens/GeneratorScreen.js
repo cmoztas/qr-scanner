@@ -6,6 +6,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import tw from 'twrnc';
 import SvgQRCode from 'react-native-qrcode-svg';
 import { FileSystem, StorageAccessFramework } from 'expo-file-system';
+import MediaLibrary from 'expo-media-library';
 
 const GeneratorScreen = () => {
   const [qrValue, setQrValue] = useState('');
@@ -14,11 +15,23 @@ const GeneratorScreen = () => {
   const getDataURL = async () => {
     const permissions = await StorageAccessFramework.requestDirectoryPermissionsAsync();
     if (permissions.granted) {
+
+      // const data = "data:image/png;base64,ASDFASDFASDf........"
+      // const base64Code = data.split("data:image/png;base64,")[1];
+      // const filename = FileSystem.documentDirectory + "some_unique_file_name.png";
+      // await FileSystem.writeAsStringAsync(filename, base64Code, {
+      //   encoding: FileSystem.EncodingType.Base64,
+      // });
+
+      // const mediaResult = await MediaLibrary.saveToLibraryAsync(filename);
+
       const uri = permissions.directoryUri;
       console.log(uri);
       await svg.toDataURL(data => {
-        StorageAccessFramework.createFileAsync(uri, 'test', 'image/png').then(data2 =>
-          StorageAccessFramework.writeAsStringAsync(uri, data2).then(data3 => console.log(data3)).catch(err => console.log(err))
+        StorageAccessFramework.createFileAsync('test', 'image/png')
+          .then(data2 => StorageAccessFramework.writeAsStringAsync(uri.replace('%3A', '/'), data)
+          .then(data3 => console.log(data3))
+          .catch(err => console.log(err))
         );
       });
     }
